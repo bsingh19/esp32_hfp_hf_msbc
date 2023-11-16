@@ -347,7 +347,6 @@ Additional mSBC codec was standardized in 2009, and in 2010 there were chips tha
 This is not a standalone codec, but the usual SBC from the A2DP standard, with a fixed encoding profile: 16 kHz, mono, bitpool 26. [reference](https://habr.com/en/articles/456182/)
 
 ## Readings
-- 
 - SBC Wiki [link](https://en.wikipedia.org/wiki/SBC_(codec))
 - mSBC audio codec [link](https://www.rfwireless-world.com/Terminology/SBC-vs-mSBC-codec.html)
 - Introduction to SBC [link](https://www.linuxfromscratch.org/blfs/view/svn/multimedia/sbc.html)
@@ -358,9 +357,24 @@ This is not a standalone codec, but the usual SBC from the A2DP standard, with a
 - Android google source [link](https://android.googlesource.com/platform/external/bluez/+/235397992afb6a676a075c8814388c4471bba6cf/utils/sbc)
 - bluez/sbc [link](https://github.com/heinervdm/bluez/tree/master/sbc)
 - BlueZ sbc-1.3 [zip](http://www.bluez.org/sbc-13/)
--
+
+## Videos
+- GStreamer Python [video](https://www.youtube.com/watch?v=HDY8pf-b1nA)
+- 
 
 ## Tools (SBC)
 - Bluetooth A2DP SBC/aptX online encoder [link](https://btcodecs.valdikss.org.ru/sbc-encoder/)
 - BT's SBC synthesis C code [link](https://dmitry.gr/?r=05.Projects&proj=09.%20Efficient%20SBC%20decoding)
 - sbc-windows project [link](https://github.com/icecoobe/sbc-windows/tree/master)
+
+## GStreamer Notes
+- PIPELINE_IN = "filesrc location=test.mp4 ! ... ! appsink"
+- PIPELINE_OUT = "appsrc ! ... ! udpsink host=127.0.0.1 port=50000" [reference (at 7:19 timestamp)](https://www.youtube.com/watch?v=VwnWHC04Qp8)
+- How to configure source [reference (at 4:28)](https://www.youtube.com/watch?v=5BgK4BIi0xo)
+- Use file as audio source [reference](https://gstreamer.freedesktop.org/documentation/coreelements/filesrc.html?gi-language=c)
+- Audio Library [reference](https://gstreamer.freedesktop.org/documentation/audio/index.html?gi-language=c)
+- Data can be injected into the pipeline and extracted from it at any time [read](https://gstreamer.freedesktop.org/documentation/tutorials/basic/short-cutting-the-pipeline.html?gi-language=c)
+
+
+## ESP Protocols
+- Examples [Gihub](https://github.com/espressif/esp-adf/tree/master/examples/protocols)
