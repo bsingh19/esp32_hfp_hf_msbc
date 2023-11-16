@@ -174,64 +174,79 @@ extern esp_bd_addr_t peer_addr;
 #if CONFIG_BT_HFP_AUDIO_DATA_PATH_HCI
 
 #define ESP_HFP_RINGBUF_SIZE 3600
-static RingbufHandle_t m_rb = NULL;
+// static RingbufHandle_t m_rb = NULL;
+
+static uint32_t s_pkt_cnt = 0; /* count for audio packet */
 
 static void bt_app_hf_client_audio_open(void)
 {
-    m_rb = xRingbufferCreate(ESP_HFP_RINGBUF_SIZE, RINGBUF_TYPE_BYTEBUF);
+    bt_i2s_task_start_up();
+    // m_rb = xRingbufferCreate(ESP_HFP_RINGBUF_SIZE, RINGBUF_TYPE_BYTEBUF);
 }
 
 static void bt_app_hf_client_audio_close(void)
 {
-    if (!m_rb)
-    {
-        return;
-    }
+    // if (!m_rb)
+    // {
+    //     return;
+    // }
 
-    vRingbufferDelete(m_rb);
+    // vRingbufferDelete(m_rb);
+    bt_i2s_task_shut_down();
 }
 
 static uint32_t bt_app_hf_client_outgoing_cb(uint8_t *p_buf, uint32_t sz)
 {
-    if (!m_rb)
-    {
-        return 0;
-    }
+    // if (!m_rb)
+    // {
+    //     return 0;
+    // }
 
-    size_t item_size = 0;
-    uint8_t *data = xRingbufferReceiveUpTo(m_rb, &item_size, 0, sz);
-    if (item_size == sz)
-    {
-        memcpy(p_buf, data, item_size);
-        vRingbufferReturnItem(m_rb, data);
-        return sz;
-    }
-    else if (0 < item_size)
-    {
-        vRingbufferReturnItem(m_rb, data);
-        return 0;
-    }
-    else
-    {
-        // data not enough, do not read
-        return 0;
-    }
+    // size_t item_size = 0;
+    // uint8_t *data = xRingbufferReceiveUpTo(m_rb, &item_size, 0, sz);
+    // if (item_size == sz)
+    // {
+    //     memcpy(p_buf, data, item_size);
+    //     vRingbufferReturnItem(m_rb, data);
+    //     return sz;
+    // }
+    // else if (0 < item_size)
+    // {
+    //     vRingbufferReturnItem(m_rb, data);
+    //     return 0;
+    // }
+    // else
+    // {
+    //     // data not enough, do not read
+    //     return 0;
+    // }
+
+    return 0;
 }
 
 static void bt_app_hf_client_incoming_cb(const uint8_t *buf, uint32_t sz)
 {
-    if (!m_rb)
-    {
-        return;
-    }
-    BaseType_t done = xRingbufferSend(m_rb, (uint8_t *)buf, sz, 0);
-    if (!done)
-    {
-        ESP_LOGE(BT_HF_TAG, "rb send fail");
-    }
+    // if (!m_rb)
+    // {
+    //     return;
+    // }
+    // BaseType_t done = xRingbufferSend(m_rb, (uint8_t *)buf, sz, 0);
+    // if (!done)
+    // {
+    //     ESP_LOGE(BT_HF_TAG, "rb send fail");
+    // }
 
-    esp_hf_client_outgoing_data_ready();
+    // esp_hf_client_outgoing_data_ready();
+
+    write_ringbuf(buf, sz);
+
+    /* log the number every 100 packets */
+    if (++s_pkt_cnt % 100 == 0)
+    {
+        ESP_LOGI(BT_HF_TAG, "Audio packet count: %" PRIu32, s_pkt_cnt);
+    }
 }
+
 #endif /* #if CONFIG_BT_HFP_AUDIO_DATA_PATH_HCI */
 
 /* callback for HF_CLIENT */

@@ -363,3 +363,4 @@ This is not a standalone codec, but the usual SBC from the A2DP standard, with a
 ## Tools (SBC)
 - Bluetooth A2DP SBC/aptX online encoder [link](https://btcodecs.valdikss.org.ru/sbc-encoder/)
 - BT's SBC synthesis C code [link](https://dmitry.gr/?r=05.Projects&proj=09.%20Efficient%20SBC%20decoding)
+- sbc-windows project [link](https://github.com/icecoobe/sbc-windows/tree/master)

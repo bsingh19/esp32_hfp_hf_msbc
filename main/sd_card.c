@@ -27,7 +27,7 @@ const char mount_point[] = MOUNT_POINT;
 FILE *pcmFile;
 
 // const char *file_pcm = "/sdcard/audio_data.txt";
-const char *file_pcm = MOUNT_POINT "/audio.pcm";
+const char *file_pcm = MOUNT_POINT "/newone.sbc";
 
 void sd_card_init(void)
 {
@@ -134,12 +134,14 @@ void sd_card_create_file(void)
         // Delete it if it exists
         unlink(file_pcm);
         ESP_LOGW(TAG, "Existing file deleted");
+        // ESP_LOGW(TAG, "File already Existing, returned");
+        // return;
     }
 
     pcmFile = fopen(file_pcm, "w+");
     if (pcmFile == NULL)
     {
-        ESP_LOGE(TAG, "%s file for writing", file_pcm);
+        ESP_LOGE(TAG, "Failed to open %s file for writing", file_pcm);
         return;
     }
 
@@ -171,7 +173,7 @@ void sd_card_write_data(const uint8_t *data, uint32_t len, size_t *bytes_written
 
     *bytes_written += len;
 
-    if (*bytes_written > (1220 * 1024) && !isFileClodes)
+    if (*bytes_written > (220 * 1024) && !isFileClodes)
     {
         isFileClodes = true;
         ESP_LOGI(TAG, "Closing file (len = %ld)", len);
@@ -191,6 +193,9 @@ void sd_card_write_data(const uint8_t *data, uint32_t len, size_t *bytes_written
     {
         ESP_LOGI(TAG, "Writing data (len = %ld)", len);
         fwrite(data, 1, len, pcmFile);
+
+        // flush the data to the file
+        // fflush(pcmFile);
     }
 }
 
